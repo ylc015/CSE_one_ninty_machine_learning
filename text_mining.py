@@ -31,6 +31,8 @@ wordCount = defaultdict(int)
 punctuation = set(string.punctuation)
 cat = defaultdict(int)
 year = defaultdict(int)
+
+#building bag of words
 for d in data:
   r = ''.join([c for c in d['review/text'].lower() if not c in punctuation and not c.decode('utf-8','ignore') in stopwords])
   for w in r.split():
@@ -40,7 +42,7 @@ for d in data:
 	cat[d['wine/variant']] += 1
 	year[d['wine/year']] += 1
 
-#best words
+#100 most frequently appear words
 counts = [(wordCount[w], w) for w in wordCount]
 counts.sort()
 counts.reverse()
@@ -48,13 +50,14 @@ counts.reverse()
 words = [x[1] for x in counts[:100]]
 print words
 
-#best var
+#100 most frequently appear categories
 counts = [(cat[w], w) for w in cat]
 counts.sort()
 counts.reverse()
 
 cats = [x[1] for x in counts[:100]]
 
+#100 most frequently appear make years
 counts = [(year[w], w) for w in year]
 counts.sort()
 counts.reverse()
@@ -78,7 +81,7 @@ catSet = set(cats)
 yearId = dict(zip(years, range(len(years))))
 yearSet = set(years)
 
-
+#building features
 def feature(datum):
 	feat = [0]*len(words)
 	r = ''.join([c for c in datum['review/text'].lower() if not c in punctuation and not c.decode('utf-8', 'ignore') in stopwords])
